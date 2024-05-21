@@ -8,7 +8,7 @@ const urls = {
 const now = new Date()
 const ts = now.toLocaleDateString("en-uk", { dateStyle: "short" }).replace(/\//g, "-")
 
-console.log(`Capturing (${urls.length}) URLs...`)
+console.log(`Capturing ${Object.keys(urls).length} URLs...`)
 ;(async () => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
