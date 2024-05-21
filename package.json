@@ -10,6 +10,6 @@
   "author": "hello@maxkohler.com",
   "license": "UNLICENSED",
   "dependencies": {
-    "puppeteer": "^22.9.0"
+    "puppeteer": "^18.0.0"
   }
 }

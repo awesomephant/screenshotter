@@ -15,7 +15,9 @@ const ts = now.toLocaleDateString("en-uk", { dateStyle: "short" }).replace(/\//g
 
   for (let [key, url] of Object.entries(urls)) {
     console.log(`Loading ${key} (${url})...`)
-    const outputDir = `./output/${key}/`
+
+    const outputDir = `./output/${key}`
+    const outputPath = `${outputDir}/${key}-${ts}.png`
 
     fs.mkdir(outputDir, { recursive: true }, (err) => {
       if (err) {
@@ -27,8 +29,9 @@ const ts = now.toLocaleDateString("en-uk", { dateStyle: "short" }).replace(/\//g
       waitUntil: "networkidle2",
     })
     await page.screenshot({
-      path: `${outputDir}/${key}-${ts}.png`,
+      path: outputPath,
     })
+    console.log(`Saved screenshot to ${outputPath}\n`)
   }
 
   await browser.close()
