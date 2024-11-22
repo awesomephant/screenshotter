@@ -3,40 +3,53 @@ import * as fs from "fs"
 
 const urls = {
   acre: "https://acrestudios.cc/",
+  acre_info: "https://acrestudios.cc/information/",
+  eilis: "https://eilissearson.com/",
+  coda: "https://ex-coda.com/",
 }
 
-const now = new Date()
-const ts = now.toLocaleDateString("en-uk", { dateStyle: "short" }).replace(/\//g, "-")
-
-console.log(`Capturing ${Object.keys(urls).length} URLs...`)
-;(async () => {
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  })
-
-  const page = await browser.newPage()
-  await page.setViewport({ width: 1500, height: 1000 })
-
-  for (let [key, url] of Object.entries(urls)) {
-    console.log(`Loading ${key} (${url})...`)
-
-    const outputDir = `./output/${key}`
-    const outputPath = `${outputDir}/${key}-${ts}.png`
-
-    fs.mkdir(outputDir, { recursive: true }, (err) => {
-      if (err) {
-        throw err
-      }
+async function getScreenshots() {
+  const now = new Date()
+  const dateFormat = new Intl.DateTimeFormat("en", { timeStyle: "short", dateStyle: "short" })
+  const ts = dateFormat.format(now).replace(/[\/,: ]/g, "-")
+  console.log(ts)
+  // console.log(`Capturing ${Object.keys(urls).length} URLs...`)
+  ;(async () => {
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     })
 
-    await page.goto(url, {
-      waitUntil: "networkidle2",
-    })
-    await page.screenshot({
-      path: outputPath,
-    })
-    console.log(`Saved screenshot to ${outputPath}\n`)
-  }
+    const page = await browser.newPage()
+    await page.setViewport({ width: 1800, height: 1350 })
 
-  await browser.close()
-})()
+    for (let [key, url] of Object.entries(urls)) {
+      console.log(`Loading ${key} (${url})...`)
+
+      const outputDir = `./output/${key}`
+      const outputPath = `${outputDir}/${key}-${ts}.png`
+
+      fs.mkdir(outputDir, { recursive: true }, (err) => {
+        if (err) {
+          throw err
+        }
+      })
+
+      await page.goto(url, {
+        waitUntil: "networkidle2",
+      })
+      await page.screenshot({
+        path: outputPath,
+      })
+      console.log(`Saved screenshot to ${outputPath}\n`)
+    }
+
+    await browser.close()
+  })()
+}
+
+async function run() {
+  await getScreenshots()
+  // setTimeout(run, 1000 * 60 * 30)
+}
+
+run()
