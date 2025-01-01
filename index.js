@@ -12,11 +12,10 @@ async function getScreenshots() {
   const now = new Date()
   const dateFormat = new Intl.DateTimeFormat("en", { timeStyle: "short", dateStyle: "short" })
   const ts = dateFormat.format(now).replace(/[\/,: ]/g, "-")
-  console.log(ts)
-  // console.log(`Capturing ${Object.keys(urls).length} URLs...`)
-  ;(async () => {
+	console.log(ts)
+		; (async () => {
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+     	args: ["--no-sandbox", "--disable-setuid-sandbox"],
     })
 
     const page = await browser.newPage()
@@ -40,7 +39,7 @@ async function getScreenshots() {
       await page.screenshot({
         path: outputPath,
       })
-      console.log(`Saved screenshot to ${outputPath}\n`)
+      console.log(`Saved screenshot to ${outputPath}`)
     }
 
     await browser.close()
@@ -49,7 +48,7 @@ async function getScreenshots() {
 
 async function run() {
   await getScreenshots()
-  // setTimeout(run, 1000 * 60 * 30)
+  setTimeout(run, 1000 * 60 * 60 * 24) // Once per day
 }
 
 run()
